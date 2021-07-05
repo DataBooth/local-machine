@@ -29,6 +29,9 @@ defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 mkdir ~/code
 cd code
 mkdir github
+cd github
+mkdir DataBooth
+mkdir mjboothaus
 
 # Get the repo for this script to track any changes
 
@@ -39,3 +42,9 @@ git clone https://github.com/DataBooth/local-machine.git
 brew install --cask visual-studio-code
 
 # NB: Enabled syncing of VSC settings via Github
+
+
+# Productivity / Workflow Tools
+
+brew install --cask flow
+brew install --cask slite
