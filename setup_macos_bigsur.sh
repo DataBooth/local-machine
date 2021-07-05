@@ -33,3 +33,9 @@ mkdir github
 # Get the repo for this script to track any changes
 
 git clone https://github.com/DataBooth/local-machine.git
+
+# Install Visual Studio Code
+
+brew install --cask visual-studio-code
+
+# NB: Enabled syncing of VSC settings via Github
