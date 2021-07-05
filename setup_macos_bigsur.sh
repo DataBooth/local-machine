@@ -1,5 +1,7 @@
 # Capture the setup from my 12" MacBook (early 2015) - clean Big Sur install (11.4)
 
+# c.f. https://github.com/herrbischoff/awesome-macos-command-line  - lots of info here
+
 # Mirror displays - Press [command]+[F1] to toggle mirroring
 
 # move Dock to left
