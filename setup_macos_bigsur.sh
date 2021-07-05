@@ -1,5 +1,7 @@
 # Capture the setup from my 12" MacBook (early 2015) - clean Big Sur install (11.4)
 
+# Mirror displays - Press [command]+[F1] to toggle mirroring
+
 # move Dock to left
 
 defaults write com.apple.dock orientation left
