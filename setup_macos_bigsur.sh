@@ -19,3 +19,15 @@ xcode-select --install
 
 brew install --cask iterm2
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false
+
+# Close Terminal and open iTerm2
+
+# Create Github coding directory
+
+mkdir ~/code
+cd code
+mkdir github
+
+# Get the repo for this script to track any changes
+
+git clone https://github.com/DataBooth/local-machine.git
