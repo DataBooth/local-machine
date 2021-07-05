@@ -33,6 +33,10 @@ cd github
 mkdir DataBooth
 mkdir mjboothaus
 
+git config --global --edit
+
+# Setup SSH key for Github - see docs on Slite
+
 # Get the repo for this script to track any changes
 
 git clone https://github.com/DataBooth/local-machine.git
