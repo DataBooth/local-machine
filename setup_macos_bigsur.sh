@@ -30,6 +30,11 @@ xcode-select --install
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+### Notes: on new MacBook
+* After completion of Homebrew install:
+** `echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/mjboothaus/.zprofile`
+** `eval "$(/opt/homebrew/bin/brew shellenv)"`
+
 # Terminal 
 
 ## Get iTerm2 (replacement Terminal app)
