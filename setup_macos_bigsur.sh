@@ -97,3 +97,6 @@ brew install --cask flow
 ## Slite (Knowledge management)
 
 brew install --cask slite
+
+## Break reminders (Time Out)
+brew install --cask time-out
