@@ -24,6 +24,16 @@ defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
 # Close Terminal and open iTerm2
 
+open /Applications/iTerm.app/
+
+# Create symbolic link for the iCloud drive (optional) i.e. cd ~/icloud
+
+ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs/ icloud
+
+# Google Chrome browser
+
+brew install --cask google-chrome
+
 # Create Github coding directory
 
 mkdir ~/code
@@ -46,6 +56,9 @@ git clone https://github.com/DataBooth/local-machine.git
 brew install --cask visual-studio-code
 
 # NB: Enabled syncing of VSC settings via Github
+
+brew install --cask mambaforge
+conda init "$(basename "${SHELL}")"
 
 
 # Productivity / Workflow Tools
