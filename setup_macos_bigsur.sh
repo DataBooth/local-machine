@@ -2,31 +2,48 @@
 
 # c.f. https://github.com/herrbischoff/awesome-macos-command-line  - lots of info here
 
-# Mirror displays - Press [command]+[F1] to toggle mirroring
+# Display(s)
 
-# move Dock to left
+## Mirror displays - Press [command]+[F1] to toggle mirroring
 
-defaults write com.apple.dock orientation left
+# Dock
+
+## move Dock to left
+
+defaults write com.apple.dock orientation left && \
 killall Dock
 
-# Install Xcode tools (takes a few minutes)
+## Auto Rearrange Spaces Based on Most Recent Use
+
+defaults write com.apple.dock mru-spaces -bool true && \
+killall Dock
+
+# Xcode command line tools
+
+## Install Xcode tools (takes a few minutes)
 
 xcode-select --install
 
-# Install Homebrew - see https://brew.sh
+# Homebrew (package management for macOS)
+
+## Install Homebrew - see https://brew.sh
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Get iTerm2 (replacement Terminal app)
+# Terminal 
+
+## Get iTerm2 (replacement Terminal app)
 
 brew install --cask iterm2
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
-# Close Terminal and open iTerm2
+## Close Terminal and open iTerm2
 
 open /Applications/iTerm.app/
 
-# Create symbolic link for the iCloud drive (optional) i.e. cd ~/icloud
+# iCloud Drive
+
+## Create symbolic link for the iCloud drive (optional) i.e. cd ~/icloud
 
 ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs/ icloud
 
@@ -34,7 +51,9 @@ ln -s ~/Library/Mobile*Documents/com~apple~CloudDocs/ icloud
 
 brew install --cask google-chrome
 
-# Create Github coding directory
+# Github.com
+
+## Create Github coding directory
 
 mkdir ~/code
 cd code
@@ -45,23 +64,31 @@ mkdir mjboothaus
 
 git config --global --edit
 
-# Setup SSH key for Github - see docs on Slite
+## Setup SSH key for Github - see docs on Slite
 
-# Get the repo for this script to track any changes
+## Get the repo for this script to track any changes
 
 git clone https://github.com/DataBooth/local-machine.git
 
-# Install Visual Studio Code
+# Code editor - Visual Studio Code
+
+## Install Visual Studio Code
 
 brew install --cask visual-studio-code
 
 # NB: Enabled syncing of VSC settings via Github
 
+## Install conda/mamba
+
 brew install --cask mambaforge
 conda init "$(basename "${SHELL}")"
 
-
 # Productivity / Workflow Tools
 
+## Flow (Workflow)
+
 brew install --cask flow
+
+## Slite (Knowledge management)
+
 brew install --cask slite
