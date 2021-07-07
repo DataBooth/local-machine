@@ -104,3 +104,7 @@ brew install --cask slite
 
 ## Break reminders (Time Out)
 brew install --cask time-out
+
+## OneDrive sync (5GB free storage & can access Office Online)
+
+brew install --cask onedrive
