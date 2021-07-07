@@ -90,6 +90,10 @@ conda init "$(basename "${SHELL}")"
 
 # Productivity / Workflow Tools
 
+## Rosetta for running Intel apps on M1 (currently Flow and Slite are Intel apps)
+
+/usr/sbin/softwareupdate --install-rosetta --agree-to-license
+
 ## Flow (Workflow)
 
 brew install --cask flow
