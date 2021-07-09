@@ -114,6 +114,7 @@ brew install --cask onedrive
 ## pipx
 
 brew install pipx
+pipx ensurepath
 
 ## poetry
 
@@ -125,4 +126,4 @@ brew install just
 
 ## Sphinx-doc
 
-brew install sphinx-doc
+pipx install Sphinx
