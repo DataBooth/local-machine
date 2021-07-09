@@ -111,5 +111,10 @@ brew install --cask onedrive
 
 # Other Command Line Tools
 
+## pipx
+
 brew install pipx
 
+## poetry
+
+brew install poetry
