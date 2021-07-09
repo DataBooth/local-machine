@@ -122,3 +122,7 @@ brew install poetry
 ## just (like make)
 
 brew install just
+
+## Sphinx-doc
+
+brew install sphinx-doc
