@@ -118,3 +118,7 @@ brew install pipx
 ## poetry
 
 brew install poetry
+
+## just (like make)
+
+brew install just
