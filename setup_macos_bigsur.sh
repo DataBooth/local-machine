@@ -94,6 +94,10 @@ conda init "$(basename "${SHELL}")"
 
 /usr/sbin/softwareupdate --install-rosetta --agree-to-license
 
+## LibreOffice
+
+brew install --cask libreoffice
+
 ## Flow (Workflow)
 
 brew install --cask flow
@@ -127,3 +131,8 @@ brew install just
 ## Sphinx-doc
 
 pipx install Sphinx
+
+## Black (code linter)
+
+brew install black
+
