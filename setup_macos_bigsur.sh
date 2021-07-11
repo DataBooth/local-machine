@@ -140,3 +140,8 @@ pipx install Sphinx
 
 brew install black
 
+# Data
+
+## Datasette.io
+
+brew install datasette
