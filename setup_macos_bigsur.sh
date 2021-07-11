@@ -94,6 +94,10 @@ conda init "$(basename "${SHELL}")"
 
 /usr/sbin/softwareupdate --install-rosetta --agree-to-license
 
+## DB Browser for SQLite
+
+brew install --cask db-browser-for-sqlite
+
 ## LibreOffice
 
 brew install --cask libreoffice
