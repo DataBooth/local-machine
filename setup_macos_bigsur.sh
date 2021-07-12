@@ -145,3 +145,10 @@ brew install black
 ## Datasette.io
 
 brew install datasette
+
+# Docker
+
+## Docker Desktop
+
+brew install --cask docker
+
