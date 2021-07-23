@@ -121,6 +121,10 @@ brew install --cask onedrive
 
 # Other Command Line Tools
 
+## tree
+
+brew install tree
+
 ## pipx
 
 brew install pipx
