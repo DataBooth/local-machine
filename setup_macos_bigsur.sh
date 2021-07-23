@@ -125,6 +125,10 @@ brew install --cask onedrive
 
 brew install tree
 
+## OpenBLAS - for install of numpy etc which is failing on M1
+
+brew install openblas
+
 ## pipx
 
 brew install pipx
