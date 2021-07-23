@@ -128,6 +128,8 @@ brew install tree
 ## OpenBLAS - for install of numpy etc which is failing on M1
 
 brew install openblas
+# export LDFLAGS="-L/opt/homebrew/opt/openblas/lib"
+# export CPPFLAGS="-I/opt/homebrew/opt/openblas/include"
 
 ## pipx
 
