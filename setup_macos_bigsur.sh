@@ -152,6 +152,10 @@ pipx install Sphinx
 
 brew install black
 
+## Hugo - static website generator
+
+brew install hugo
+
 # Data
 
 ## Datasette.io
