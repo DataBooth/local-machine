@@ -168,3 +168,10 @@ brew install datasette
 
 brew install --cask docker
 
+## Disk Drill (find files / disk usage)
+
+brew install --cask disk-drill
+
+## Spyder (Scientific Python IDE)
+
+brew install --cask spyder
