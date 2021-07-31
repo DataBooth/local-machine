@@ -175,3 +175,7 @@ brew install --cask disk-drill
 ## Spyder (Scientific Python IDE)
 
 brew install --cask spyder
+
+## SQLFluff
+
+pipx install sqlfluff
