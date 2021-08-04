@@ -183,3 +183,7 @@ pipx install sqlfluff
 ## Node
 
 brew install node
+
+## ImageMagick
+
+brew install imagemagick
