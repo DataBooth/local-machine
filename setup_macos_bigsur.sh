@@ -179,3 +179,7 @@ brew install --cask spyder
 ## SQLFluff
 
 pipx install sqlfluff
+
+## Node
+
+brew install node
