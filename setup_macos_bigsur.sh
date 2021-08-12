@@ -187,3 +187,7 @@ brew install node
 ## ImageMagick
 
 brew install imagemagick
+
+## Rectangle - Window manager
+
+brew install --cask rectangle
