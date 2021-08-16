@@ -191,3 +191,7 @@ brew install imagemagick
 ## Rectangle - Window manager
 
 brew install --cask rectangle
+
+## wget
+
+brew install wget
