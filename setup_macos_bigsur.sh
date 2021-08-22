@@ -195,3 +195,7 @@ brew install --cask rectangle
 ## wget
 
 brew install wget
+
+## yarn - Javascript package manager
+
+brew install yarn
