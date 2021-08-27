@@ -199,3 +199,7 @@ brew install wget
 ## yarn - Javascript package manager
 
 brew install yarn
+
+## PyScaffold
+
+pipx install pyscaffold
