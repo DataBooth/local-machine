@@ -203,3 +203,7 @@ brew install yarn
 ## PyScaffold
 
 pipx install pyscaffold
+
+## Pandoc - Document conversions
+
+brew install pandoc
