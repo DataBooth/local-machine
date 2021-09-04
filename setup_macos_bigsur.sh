@@ -207,3 +207,11 @@ pipx install pyscaffold
 ## Pandoc - Document conversions
 
 brew install pandoc
+
+## CSV Kit
+
+brew install csvkit
+
+## Diff tool
+
+brew install diffr
