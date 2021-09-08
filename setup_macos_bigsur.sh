@@ -215,3 +215,7 @@ brew install csvkit
 ## Diff tool
 
 brew install diffr
+
+## PostgreSQL
+
+brew install postgresql
