@@ -221,3 +221,7 @@ brew install diffr
 brew install postgresql
 
 brew install --cask pgadmin4
+
+# Any.do
+
+brew install --cask anydo
