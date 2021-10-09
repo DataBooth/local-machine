@@ -222,6 +222,6 @@ brew install postgresql
 
 brew install --cask pgadmin4
 
-# Any.do
+# marp.app
 
-brew install --cask anydo
+brew install marp-cli
