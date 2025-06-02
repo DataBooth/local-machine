@@ -72,6 +72,140 @@ class MacBackupApp:
         )
         st.title("MacBook Configuration Backup")
 
+        show_all = st.sidebar.button("Show All", key="sidebar_show_all")
+        backup_all = st.sidebar.button("Backup All", key="sidebar_backup_all")
+
+        # Optionally, collect results to display in the sidebar
+        if show_all or backup_all:
+            st.sidebar.markdown("---")
+            st.sidebar.markdown("### Results")
+            for tab_name in self.tabs_list:
+                try:
+                    if show_all:
+                        if tab_name == "Dotfiles":
+                            files = [
+                                str(f)
+                                for f in Path.home().glob(".*")
+                                if f.is_file() and f.name != ".DS_Store"
+                            ]
+                            st.sidebar.write(f"**{tab_name}:**")
+                            st.sidebar.write(files)
+                        elif tab_name == "Homebrew":
+                            st.sidebar.write(f"**{tab_name}:**")
+                            st.sidebar.code(
+                                self.backup_utils["Homebrew"].list_formulae()
+                            )
+                            st.sidebar.code(self.backup_utils["Homebrew"].list_casks())
+                        elif tab_name == "SSH Keys":
+                            st.sidebar.write(f"**{tab_name}:**")
+                            st.sidebar.write(self.backup_utils["SSH Keys"].list_keys())
+                            st.sidebar.code(self.backup_utils["SSH Keys"].show_config())
+                        elif tab_name == "macOS Info":
+                            info = self.backup_utils["macOS Info"].get_info()
+                            st.sidebar.write(f"**{tab_name}:**")
+                            st.sidebar.write(
+                                {
+                                    "Date": info["date"],
+                                    "macOS Version": info["macos_version"],
+                                }
+                            )
+                            st.sidebar.write(info["applications"])
+                        elif tab_name == "VS Code":
+                            st.sidebar.write(f"**{tab_name}:**")
+                            st.sidebar.write(
+                                self.backup_utils["VS Code"].list_extensions()
+                            )
+                            st.sidebar.code(
+                                self.backup_utils["VS Code"].user_settings()
+                            )
+                        elif tab_name == "Crontab":
+                            st.sidebar.write(f"**{tab_name}:**")
+                            st.sidebar.code(
+                                self.backup_utils["Crontab"].export_crontab()
+                            )
+                        elif tab_name == "LaunchAgents":
+                            st.sidebar.write(f"**{tab_name}:**")
+                            st.sidebar.write(
+                                self.backup_utils["LaunchAgents"].list_agents()
+                            )
+                        elif tab_name == "Python tools":
+                            st.sidebar.write(f"**{tab_name}:**")
+                            st.sidebar.code(
+                                self.backup_utils["Python tools"]["uv"].list_tools()
+                            )
+                            st.sidebar.code(
+                                self.backup_utils["Python tools"]["pipx"].list_tools()
+                            )
+                        elif tab_name == "R":
+                            rprofile = Path.home() / ".Rprofile"
+                            renviron = Path.home() / ".Renviron"
+                            st.sidebar.write(f"**{tab_name}:**")
+                            if rprofile.exists():
+                                st.sidebar.code(rprofile.read_text())
+                            if renviron.exists():
+                                st.sidebar.code(renviron.read_text())
+                        elif tab_name == "Git":
+                            gitconfig = Path.home() / ".gitconfig"
+                            gitignore = Path.home() / ".gitignore_global"
+                            st.sidebar.write(f"**{tab_name}:**")
+                            if gitconfig.exists():
+                                st.sidebar.code(gitconfig.read_text())
+                            if gitignore.exists():
+                                st.sidebar.code(gitignore.read_text())
+                        elif tab_name == "Terminal":
+                            term_plist = (
+                                Path.home()
+                                / "Library/Preferences/com.apple.Terminal.plist"
+                            )
+                            iterm_plist = (
+                                Path.home()
+                                / "Library/Preferences/com.googlecode.iterm2.plist"
+                            )
+                            st.sidebar.write(f"**{tab_name}:**")
+                            for plist_file in [term_plist, iterm_plist]:
+                                if plist_file.exists():
+                                    st.sidebar.code(
+                                        plist_file.read_text(errors="replace")
+                                    )
+                        elif tab_name == "Cloud CLIs":
+                            st.sidebar.write(f"**{tab_name}:**")
+                            for label, path in [
+                                ("AWS", Path.home() / ".aws"),
+                                ("GCloud", Path.home() / ".config/gcloud"),
+                                ("Azure", Path.home() / ".azure"),
+                            ]:
+                                if path.exists():
+                                    st.sidebar.write(f"{label} Config")
+                                    st.sidebar.write(list(path.glob("**/*")))
+                        elif tab_name == "DuckDB":
+                            db = Path.home() / "duckdb.db"
+                            st.sidebar.write(f"**{tab_name}:**")
+                            if db.exists():
+                                st.sidebar.write(f"Database location: {db}")
+                                st.sidebar.write(
+                                    f"Size: {db.stat().st_size / 1024:.1f} KB"
+                                )
+                        elif tab_name == "Secrets":
+                            secrets = self.backup_utils["Secrets"].report_table()
+                            st.sidebar.write(f"**{tab_name}:**")
+                            if not secrets:
+                                st.sidebar.info("No .env or .secrets.toml files found")
+                            else:
+                                st.sidebar.write(secrets)
+                    if backup_all:
+                        if tab_name in self.backup_utils and hasattr(
+                            self.backup_utils[tab_name], "backup"
+                        ):
+                            result = self.backup_utils[tab_name].backup()
+                            st.sidebar.success(f"{tab_name} backup complete!")
+                            if isinstance(result, (list, tuple)):
+                                for f in result:
+                                    st.sidebar.code(f"Backup file: {f}")
+                            else:
+                                st.sidebar.code(f"Backup file: {result}")
+                except Exception as e:
+                    st.sidebar.error(f"Error in {tab_name}: {e}")
+
         tabs = st.tabs(self.tabs_list)
         tab_indices = {name: idx for idx, name in enumerate(self.tabs_list)}
 
