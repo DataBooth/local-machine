@@ -1,0 +1,20 @@
+[ui]
+tabs = [
+    "Dotfiles",
+    "Homebrew",
+    "SSH Keys",
+    "macOS Info",
+    "VS Code",
+    # "Crontab",
+    "LaunchAgents",
+    "Python tools",
+    "R",
+    "Git",
+    "Terminal",
+    "Cloud CLIs",
+    "DuckDB",
+    "Secrets"
+]
+
+[backup]
+dir = "/Users/mjboothaus/icloud/backup"

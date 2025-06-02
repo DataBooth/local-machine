@@ -1,69 +1,104 @@
 import argparse
 from pathlib import Path
-
 from loguru import logger
 
+from plumbum import local, FG
+
 from local_machine.utils import (
-    BrewBackup,
-    CrontabBackup,
     DotfilesBackup,
-    LaunchAgentsBackup,
-    MacOSInfo,
-    PipxList,
+    BrewBackup,
     SSHKeysLister,
-    UVToolList,
+    MacOSInfo,
     VSCodeExtensions,
+    CrontabBackup,
+    LaunchAgentsBackup,
+    PipxList,
+    UVToolList,
+    RBackup,
+    GitBackup,
+    TerminalBackup,
+    CloudCLIsBackup,
+    DuckDBBackup,
+    SecretsBackup,
 )
 
 
 def run_cli(args):
     backup_dir = args.backup_dir
+    dry_run = args.dry_run
 
-    dotfiles = DotfilesBackup(backup_dir)
-    brew = BrewBackup(backup_dir)
-    ssh = SSHKeysLister()
-    macos = MacOSInfo()
-    vscode = VSCodeExtensions()
-    crontab = CrontabBackup()
-    launchagents = LaunchAgentsBackup()
-    pipx = PipxList()
-    uvtool = UVToolList()
+    def maybe_write(fn, *a, **kw):
+        if dry_run:
+            print(f"[DRY RUN] Would run: {fn.__qualname__}")
+            return "Dry run: no files written."
+        return fn(*a, **kw)
 
-    if args.action == "dotfiles" or args.action == "all":
-        backup_file = dotfiles.backup()
-        print(f"Dotfiles backup created at {backup_file}")
+    if args.action in ("dotfiles", "all"):
+        result = maybe_write(DotfilesBackup(backup_dir).backup)
+        print("Dotfiles backup:", result)
 
-    if args.action == "brew" or args.action == "all":
-        brewfile = brew.backup()
-        print(f"Brewfile created at {brewfile}")
-        print("Formulae:\n", brew.list_formulae())
-        print("Casks:\n", brew.list_casks())
+    if args.action in ("brew", "all"):
+        result = maybe_write(BrewBackup(backup_dir).backup)
+        print("Brewfile backup:", result)
+        print("Formulae:\n", BrewBackup(backup_dir).list_formulae())
+        print("Casks:\n", BrewBackup(backup_dir).list_casks())
 
-    if args.action == "ssh" or args.action == "all":
-        print("SSH Keys:", ssh.list_keys())
-        print("SSH Config:\n", ssh.show_config())
+    if args.action in ("ssh", "all"):
+        print("SSH Keys:", SSHKeysLister().list_keys())
+        print("SSH Config:\n", SSHKeysLister().show_config())
 
-    if args.action == "macos" or args.action == "all":
-        info = macos.get_info()
+    if args.action in ("macos", "all"):
+        info = MacOSInfo().get_info()
         print("Date:", info["date"])
         print("macOS Version:", info["macos_version"])
         print("Installed Applications:", info["applications"])
 
-    if args.action == "vscode" or args.action == "all":
-        print("VS Code Extensions:", vscode.list_extensions())
-        print("VS Code User Settings:\n", vscode.user_settings())
+    if args.action in ("vscode", "all"):
+        print("VS Code Extensions:", VSCodeExtensions().list_extensions())
+        print("VS Code User Settings:\n", VSCodeExtensions().user_settings())
 
-    if args.action == "crontab" or args.action == "all":
-        print("User Crontab:\n", crontab.export_crontab())
+    if args.action in ("crontab", "all"):
+        print("User Crontab:\n", CrontabBackup().export_crontab())
 
-    if args.action == "launchagents" or args.action == "all":
-        print("LaunchAgents:", launchagents.list_agents())
+    if args.action in ("launchagents", "all"):
+        print("LaunchAgents:", LaunchAgentsBackup().list_agents())
 
-    if args.action == "pipx" or args.action == "all":
-        print("pipx tools:\n", pipx.list_tools())
+    if args.action in ("pipx", "all"):
+        print("pipx tools:\n", PipxList().list_tools())
 
-    if args.action == "uv" or args.action == "all":
-        print("uv tools:\n", uvtool.list_tools())
+    if args.action in ("uv", "all"):
+        print("uv tools:\n", UVToolList().list_tools())
+
+    if args.action in ("r", "all"):
+        result = maybe_write(RBackup(backup_dir).backup)
+        print("R backup:", result)
+
+    if args.action in ("git", "all"):
+        result = maybe_write(GitBackup(backup_dir).backup)
+        print("Git backup:", result)
+
+    if args.action in ("terminal", "all"):
+        result = maybe_write(TerminalBackup(backup_dir).backup)
+        print("Terminal backup:", result)
+
+    if args.action in ("cloud", "all"):
+        result = maybe_write(CloudCLIsBackup(backup_dir).backup)
+        print("Cloud CLI backup:", result)
+
+    if args.action in ("duckdb", "all"):
+        result = maybe_write(DuckDBBackup(backup_dir).backup)
+        print("DuckDB backup:", result)
+
+    if args.action in ("secrets", "all"):
+        secrets = SecretsBackup().report_table()
+        if not secrets:
+            print("No .env or .secrets.toml files found.")
+        else:
+            print("Secrets found:")
+            for entry in secrets:
+                print(
+                    f"{entry['path']} | {entry['size_bytes']} bytes | modified {entry['last_modified']}"
+                )
 
 
 def main():
@@ -72,6 +107,7 @@ def main():
     parser.add_argument(
         "--backup-dir", type=Path, default=Path.home() / "icloud/backup"
     )
+    parser.add_argument("--dry-run", action="store_true", help="Do not write any files")
     parser.add_argument(
         "action",
         nargs="?",
@@ -85,6 +121,12 @@ def main():
             "launchagents",
             "pipx",
             "uv",
+            "r",
+            "git",
+            "terminal",
+            "cloud",
+            "duckdb",
+            "secrets",
             "all",
         ],
         default="all",
@@ -94,16 +136,11 @@ def main():
     logger.add("backup_main.log", rotation="1 week")
 
     if args.ui:
-        # Only launch Streamlit if run as 'streamlit run main.py -- --ui'
-        import streamlit as st
-        from local_machine.config import (
-            ProjectConfig,
-        )
-        from local_machine.app import MacBackupApp
-
-        config = ProjectConfig()
-        app = MacBackupApp(config)
-        app.run()
+        app_path = Path(__file__).parent.parent / "src" / "local_machine" / "app.py"
+        if not app_path.exists():
+            raise FileNotFoundError(f"Streamlit app not found at {app_path}")
+        streamlit = local["streamlit"]
+        streamlit["run", str(app_path)] & FG
     else:
         run_cli(args)
 
