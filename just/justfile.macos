@@ -2,8 +2,8 @@
 # Bootstrap with sh/bootstrap.sh before running these recipes
 
 # User variables (set your defaults here or override at runtime)
-personal_name ?= "yourname"
-company_name ?= "yourcompany"
+personal_name := "yourname"
+company_name := "yourcompany"
 
 dock-left:
     defaults write com.apple.dock orientation left

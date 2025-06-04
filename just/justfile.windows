@@ -1,8 +1,8 @@
 # justfile.windows
 
 # Variables (override at runtime: just github-dirs personal_name=alice company_name=acme)
-personal_name ?= "yourname"
-company_name ?= "yourcompany"
+personal_name := "yourname"
+company_name := "yourcompany"
 
 # Create GitHub directories for company, personal, and external projects
 github-dirs personal_name company_name:

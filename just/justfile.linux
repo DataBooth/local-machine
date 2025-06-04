@@ -1,7 +1,7 @@
 # Linux/WSL Data Science/Engineering Setup Justfile (justfile_linux.setup)
 
-personal_name ?= "yourname"
-company_name ?= "yourcompany"
+personal_name := "yourname"
+company_name := "yourcompany"
 
 github-dirs personal_name company_name:
     mkdir -p ~/code/github/{{company_name}}
