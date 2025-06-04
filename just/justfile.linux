@@ -1,0 +1,115 @@
+# Linux/WSL Data Science/Engineering Setup Justfile (justfile_linux.setup)
+
+personal_name ?= "yourname"
+company_name ?= "yourcompany"
+
+github-dirs personal_name company_name:
+    mkdir -p ~/code/github/{{company_name}}
+    mkdir -p ~/code/github/{{personal_name}}
+    mkdir -p ~/code/github/external
+    echo "# {{company_name}}\nThis directory contains company ({{company_name}}) repositories." > ~/code/github/{{company_name}}/README.md
+    echo "# {{personal_name}}\nThis directory contains personal user repositories for {{personal_name}}." > ~/code/github/{{personal_name}}/README.md
+    echo "# external\nThis directory contains third-party or external repositories not owned by you or {{company_name}}." > ~/code/github/external/README.md
+
+data-dirs:
+    mkdir -p ~/data/client
+    mkdir -p ~/data/local
+    echo "# client\nThis directory is for client-specific (often sensitive) data sets." > ~/data/client/README.md
+    echo "# local\nThis directory is for local or general data sets (e.g., public data, AI models)." > ~/data/local/README.md
+
+vscode:
+    if ! command -v code > /dev/null; then \
+        if command -v brew > /dev/null; then \
+            brew install --cask code; \
+        else \
+            sudo snap install --classic code; \
+        fi \
+    fi
+
+tree:
+    if command -v brew > /dev/null; then \
+        brew install tree; \
+    else \
+        sudo apt-get install -y tree; \
+    fi
+
+just:
+    if command -v brew > /dev/null; then \
+        brew install just; \
+    else \
+        sudo apt-get install -y just; \
+    fi
+
+uv:
+    if command -v brew > /dev/null; then \
+        brew install uv; \
+    else \
+        pip3 install uv; \
+    fi
+
+hugo:
+    if command -v brew > /dev/null; then \
+        brew install hugo; \
+    else \
+        sudo apt-get install -y hugo; \
+    fi
+
+wget:
+    if command -v brew > /dev/null; then \
+        brew install wget; \
+    else \
+        sudo apt-get install -y wget; \
+    fi
+
+pandoc:
+    if command -v brew > /dev/null; then \
+        brew install pandoc; \
+    else \
+        sudo apt-get install -y pandoc; \
+    fi
+
+csvkit:
+    if command -v brew > /dev/null; then \
+        brew install csvkit; \
+    else \
+        pip3 install csvkit; \
+    fi
+
+diffr:
+    if command -v brew > /dev/null; then \
+        brew install diffr; \
+    fi
+
+# Optional tools (add more as needed)
+libreoffice:
+    if command -v brew > /dev/null; then \
+        brew install --cask libreoffice; \
+    else \
+        sudo apt-get install -y libreoffice; \
+    fi
+
+# Group recipes
+core:
+    just github-dirs personal_name={{personal_name}} company_name={{company_name}}
+    just data-dirs
+    just vscode
+    just tree
+    just just
+    just uv
+    just hugo
+    just wget
+    just pandoc
+    just csvkit
+    just diffr
+
+optional:
+    just libreoffice
+
+all:
+    just core
+    just optional
+
+help:
+    @echo "Run 'just core' for core setup, 'just optional' for optional tools."
+    @echo "To set your names: just github-dirs personal_name=<yourname> company_name=<yourcompany>"
+    @echo "Or set defaults at the top of the justfile."

@@ -30,3 +30,13 @@ app-ui:
         exit 1
     fi
     streamlit run {{app_name}}
+
+## --------- Docker recipes ---------
+
+# Build the Docker image (Dockerfile) for Linux just/bootstrap testing
+docker-build:
+    docker build -t linux-just-bootstrap-test .
+
+# Run the Docker container interactively and remove on exit
+docker-run:
+   docker run -it --rm linux-just-bootstrap-test

@@ -1,0 +1,138 @@
+# MacBook Data Science/Engineering Setup Justfile (justfile.setup)
+# Bootstrap with sh/bootstrap.sh before running these recipes
+
+# User variables (set your defaults here or override at runtime)
+personal_name ?= "yourname"
+company_name ?= "yourcompany"
+
+dock-left:
+    defaults write com.apple.dock orientation left
+    killall Dock
+
+dock-recent-spaces:
+    defaults write com.apple.dock mru-spaces -bool true
+    killall Dock
+
+chrome:
+    brew install --cask google-chrome
+
+github-dirs personal_name company_name:
+    mkdir -p ~/code/github/{{company_name}}
+    mkdir -p ~/code/github/{{personal_name}}
+    mkdir -p ~/code/github/external
+    echo "# {{company_name}}\nThis directory contains company ({{company_name}}) repositories." > ~/code/github/{{company_name}}/README.md
+    echo "# {{personal_name}}\nThis directory contains personal user repositories for {{personal_name}}." > ~/code/github/{{personal_name}}/README.md
+    echo "# external\nThis directory contains third-party or external repositories not owned by you or {{company_name}}." > ~/code/github/external/README.md
+
+data-dirs:
+    mkdir -p ~/data/client
+    mkdir -p ~/data/local
+    echo "# client\nThis directory is for client-specific (often sensitive) data sets." > ~/data/client/README.md
+    echo "# local\nThis directory is for local or general data sets (e.g., public data, AI models)." > ~/data/local/README.md
+
+vscode:
+    brew install --cask visual-studio-code
+
+tree:
+    brew install tree
+
+just:
+    brew install just
+
+uv:
+    brew install uv
+
+hugo:
+    brew install hugo
+
+rectangle:
+    brew install --cask rectangle
+
+wget:
+    brew install wget
+
+pandoc:
+    brew install pandoc
+
+csvkit:
+    brew install csvkit
+
+diffr:
+    brew install diffr
+
+# Optional tools (add more as needed)
+libreoffice:
+    brew install --cask libreoffice
+
+onedrive:
+    brew install --cask onedrive
+
+datasette:
+    brew install datasette
+
+sqlfluff:
+    uv pip install sqlfluff
+
+node:
+    brew install node
+
+imagemagick:
+    brew install imagemagick
+
+postgresql:
+    brew install postgresql
+
+pgadmin4:
+    brew install --cask pgadmin4
+
+docker:
+    brew install --cask docker
+
+disk-drill:
+    brew install --cask disk-drill
+
+# Homebrew backup/restore
+brew-restore BREWFILE="~/Brewfile":
+    brew bundle --file {{BREWFILE}}
+
+brew-backup BACKUP_DIR="~/brew-backup":
+    mkdir -p {{BACKUP_DIR}}
+    brew bundle dump --file {{BACKUP_DIR}}/Brewfile --force
+
+# Group recipes
+core:
+    just dock-left
+    just dock-recent-spaces
+    just chrome
+    just github-dirs personal_name={{personal_name}} company_name={{company_name}}
+    just data-dirs
+    just vscode
+    just tree
+    just just
+    just uv
+    just rectangle
+    just wget
+    just pandoc
+    just csvkit
+    just diffr
+
+optional:
+    just libreoffice
+    just onedrive
+    just datasette
+    just sqlfluff
+    just node
+    just imagemagick
+    just postgresql
+    just pgadmin4
+    just docker
+    just disk-drill
+
+all:
+    just core
+    just optional
+
+help:
+    @echo "Run 'just core' for core setup, 'just optional' for optional tools."
+    @echo "To set your names: just github-dirs personal_name=<yourname> company_name=<yourcompany>"
+    @echo "Or set defaults at the top of the justfile."
