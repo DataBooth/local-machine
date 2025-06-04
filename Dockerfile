@@ -13,19 +13,17 @@ RUN useradd -ms /bin/bash devuser && echo "devuser ALL=(ALL) NOPASSWD:ALL" >> /e
 USER devuser
 WORKDIR /home/devuser
 
-# Set environment variables for non-interactive Homebrew install
 ENV NONINTERACTIVE=1
 
 # Install Homebrew as devuser
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Add Homebrew to PATH for all future RUN, CMD, and ENTRYPOINT instructions
+# *** Add Homebrew to PATH for all subsequent steps ***
 ENV PATH="/home/devuser/.linuxbrew/bin:/home/devuser/.linuxbrew/sbin:${PATH}"
 
-# Install just with Homebrew
+# Now brew and anything it installs (like just) will be found
 RUN brew install just
 
-# Copy your scripts and justfile
 COPY --chown=devuser:devuser sh/bootstrap_linux.sh ./bootstrap_linux.sh
 COPY --chown=devuser:devuser just/justfile.linux ./justfile
 

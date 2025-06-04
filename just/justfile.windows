@@ -1,0 +1,35 @@
+# justfile.windows
+
+# Variables (override at runtime: just github-dirs personal_name=alice company_name=acme)
+personal_name ?= "yourname"
+company_name ?= "yourcompany"
+
+# Create GitHub directories for company, personal, and external projects
+github-dirs personal_name company_name:
+    mkdir code\github\{{company_name}}
+    mkdir code\github\{{personal_name}}
+    mkdir code\github\external
+    echo # {{company_name}}\nThis directory contains company ({{company_name}}) repositories. > code\github\{{company_name}}\README.md
+    echo # {{personal_name}}\nThis directory contains personal user repositories for {{personal_name}}. > code\github\{{personal_name}}\README.md
+    echo # external\nThis directory contains third-party or external repositories not owned by you or {{company_name}}. > code\github\external\README.md
+
+# Create data directories for client and local data
+data-dirs:
+    mkdir data\client
+    mkdir data\local
+    echo # client\nThis directory is for client-specific (often sensitive) data sets. > data\client\README.md
+    echo # local\nThis directory is for local or general data sets (e.g., public data, AI models). > data\local\README.md
+
+# Install core tools using Chocolatey
+install-core:
+    choco install git vscode googlechrome 7zip python just -y --no-progress
+
+# Group core setup
+core:
+    just install-core
+    just github-dirs personal_name={{personal_name}} company_name={{company_name}}
+    just data-dirs
+
+help:
+    @echo "Run 'just core' to set up core tools and directories."
+    @echo "Override names: just github-dirs personal_name=alice company_name=acme"
