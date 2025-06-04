@@ -3,6 +3,9 @@
 personal_name := "yourname"
 company_name := "yourcompany"
 
+default:
+    @just --list
+
 github-dirs personal_name company_name:
     mkdir -p ~/code/github/{{company_name}}
     mkdir -p ~/code/github/{{personal_name}}
@@ -18,26 +21,31 @@ data-dirs:
     echo "# local\nThis directory is for local or general data sets (e.g., public data, AI models)." > ~/data/local/README.md
 
 vscode:
-    if ! command -v code > /dev/null; then \
-        if command -v brew > /dev/null; then \
-            brew install --cask code; \
-        else \
-            sudo snap install --classic code; \
-        fi \
+    if command -v snap > /dev/null; then \
+        sudo snap install --classic code; \
+    elif uname -m | grep -q 'aarch64\|arm64'; then \
+        wget -O code_arm64.deb "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-arm64" && \
+        sudo apt-get update && \
+        sudo apt-get install -y ./code_arm64.deb && \
+        rm code_arm64.deb; \
+    elif command -v apt > /dev/null; then \
+        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
+        sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/ && \
+        sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list' && \
+        sudo apt-get update && \
+        sudo apt-get install -y code && \
+        rm microsoft.gpg; \
+    else \
+        echo "No supported package manager found for VS Code installation."; \
+        exit 1; \
     fi
+
 
 tree:
     if command -v brew > /dev/null; then \
         brew install tree; \
     else \
         sudo apt-get install -y tree; \
-    fi
-
-just:
-    if command -v brew > /dev/null; then \
-        brew install just; \
-    else \
-        sudo apt-get install -y just; \
     fi
 
 uv:
@@ -90,11 +98,10 @@ libreoffice:
 
 # Group recipes
 core:
-    just github-dirs personal_name={{personal_name}} company_name={{company_name}}
+    just github-dirs {{personal_name}} {{company_name}}
+    just tree
     just data-dirs
     just vscode
-    just tree
-    just just
     just uv
     just hugo
     just wget
